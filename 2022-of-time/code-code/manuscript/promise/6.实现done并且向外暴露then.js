@@ -106,6 +106,7 @@ function Promise () {
     }
 
     this.done = function (onFulfilled, onRejected) {
+        // 让then中传递过来的内容异步的去执行，
         setTimeout(function(){
             handle({
                 onFulfilled,
@@ -121,10 +122,23 @@ function Promise () {
                 function (result) {
                     if ('function' === typeof onFulfilled) {
                         try {
-                            
+                            return resolve(onFulfilled(result))
                         } catch (error) {
-                            
+                            return reject(error)
                         }
+                    } else {
+                        return resolve(result)
+                    }
+                },
+                function (error) {
+                    if ('fcuntion' === typeof onRejected) {
+                        try {
+                            return resolve(onRejected(error))
+                        } catch (error) {
+                            return reject(error)
+                        }
+                    } else {
+                        return reject(error)
                     }
                 }
             )
