@@ -106,7 +106,7 @@ function Promise () {
     }
 
     this.done = function (onFulfilled, onRejected) {
-        // 让then中传递过来的内容异步的去执行，
+        // 让then中传递过来的内容异步的去执行
         setTimeout(function(){
             handle({
                 onFulfilled,
@@ -115,6 +115,7 @@ function Promise () {
         }, 0)
     }
 
+    // then中的任务会进行二次封装，封装成promise对象，在Promise中会执行上面done
     this.then = function (onFulfilled, onRejected) {
         const self = this;
         return new Promise(function (resolve, reject) {
